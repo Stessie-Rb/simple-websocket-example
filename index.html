@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Restaurants</title>
+    </head>
+ 
+    <body>
+        <h1>Communication avec socket.io !</h1>
+        <p><input type="button" value="Compter les restaurants Américains" id="compter" /></p>
+        <div id="restos"></div>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io.connect('http://localhost:8080');
+            var file = 'dataset.json';
+           
+            $('#compter').click(function () {
+                socket.emit('raw_data', file);
+            })
+            
+            socket.on('result', function(result){
+                var div = document.getElementById('restos');
+                var count = document.createElement('h4');
+                div.appendChild(count);
+                count.innerHTML = "Il y a " + result.length + " restaurants de type Américain dans le fichier reçu:";
+                for(var i = 0; i < result.length; i++){
+                    var restoName = document.createElement('p');
+                    restoName.innerHTML = result[i];
+                    div.appendChild(restoName);
+                }
+            });
+            
+           
+        </script>
+    </body>
+</html>
